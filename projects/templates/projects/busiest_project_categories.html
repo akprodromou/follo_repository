@@ -1,0 +1,96 @@
+<script>
+  Chart.defaults.global.defaultFontColor = 'white';
+  var defaultData = []
+  var labels = [];
+  var endpoint = '/projects/busiest_project_categories/'
+  $.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(data){
+      labels = data.labels
+      defaultData = data.data
+      setChart_Busiest_Categories()
+    },
+    error: function(error_data){
+      console.log("error")
+      console.log(error_data)
+    },
+  })
+
+// ctx2 chart
+  function setChart_Busiest_Categories(){
+    var ctx = document.getElementById('busiest_project_categories');
+    var goals_chart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        datasets: [{
+          borderWidth: 0,
+          data: defaultData,
+          backgroundColor: ['#6B8D73','#F0D8DA','#A38488','#EEF0D1','#C9DFF2','#EDE4D3'],
+          label: 'Logged hours, past 2 weeks',
+          borderColor: "rgba(0,0,0,0)",
+        }],
+        labels: labels
+      },
+      options: {
+        // tooltips: {
+        //     mode: 'nearest'
+        // },
+        // offset: true,
+        // scales: {
+        //     xAxes: [{
+        //       ticks: {
+        //       precision:0,
+        //       beginAtZero: true,
+        //       lineHeight: .5,
+        //       fontSize: 12,
+        //       fontColor: 'rgba(256, 256, 256, .7)',
+        //       padding: -3,
+        //     },
+        //       display: true,
+        //         gridLines: {
+        //           display: false,
+        //           drawBorder: false,
+        //         },
+        //     }],
+        //     yAxes: [{
+        //       ticks: {
+        //         mirror: false,
+        //         beginAtZero: true,
+        //     },
+        //       display: true,
+        //       categoryPercentage: 1,
+        //       barPercentage: .3,
+        //       maxBarThickness: 100,
+        //         stacked: false,
+        //         gridLines: {
+        //           display: false,
+        //           drawBorder: false,
+        //         },
+        //     }]
+        // },
+        plugins: {
+          datalabels: {
+                color: '#01579b',
+                font:{
+                  family: "'Inter', sans-serif",
+                }
+              }
+        },
+        legend:{
+          position: 'top',
+          display: true,
+          labels: {
+            boxWidth: 7,
+            usePointStyle: true,
+            borderColor: 'rgba(0, 0, 0, 0)',
+          }
+        },
+        // title: {
+        //   display: false,
+        // },
+      }
+    });
+  }
+
+</script>

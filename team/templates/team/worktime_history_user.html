@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block body %}
+
+{% bootstrap_javascript jquery='full' %}
+
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'team:users_list' %}">Users</a></li>
+  </ol>
+</nav>
+
+<div class="container">
+<br>
+<h4>Worktime history for {{ user_examined }} <span style="font-size:0.9rem;"><a href="{% url 'team:add_worktime_user' user.pk %}">+</a></span></h4>
+  {% if object_list %}
+    <table style="width:100%"
+      data-classes="table"
+      data-toggle="table"
+      data-locale="en-US"
+      data-pagination="true"
+      data-search="true">
+      <thead>
+        <tr>
+          <th data-sortable="true" data-field="project">Project</th>
+          <th data-sortable="true" data-field="task">Task</th>
+          <th data-sortable="true" data-field="date" class="align-middle text-center">Date</th>
+          <th class="align-middle text-center" data-field="hours">Hours</th>
+          <th class="align-middle text-center" data-field="edit" >Edit</th>
+          <th class="align-middle text-center" data-field="delete" >Delete</th>
+        </tr>
+      </thead>
+        {% for workhour in object_list %}
+        <tr>
+          <td class="align-middle">{{ workhour.worktime_task.task_project }}</td>
+          <td class="align-middle">{{ workhour.worktime_task.task_description }}</td>
+          <td class="align-middle text-center" style="width:120px">{{ workhour.worktime_date|date:"d/m/Y" }}</td>
+          <td class="align-middle text-center">{{ workhour.worktime_hour }}</td>
+          <td class="align-middle text-center">
+            <a href="{% url 'team:edit_worktime_user' workhour.pk %}" class="btn btn-sm" role="button"><i class="far fa-edit"></i></a>
+          </td>
+          <td class="align-middle text-center">
+            <a href="{% url 'team:delete_worktime_user' workhour.pk %}" class="btn btn-sm">
+              <i class="far fa-trash-alt"></i>
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+  </table>
+
+    <p><a href="{% url 'team:add_worktime_user' user.pk %}">Add +</a></p>
+{% else %}
+    <p>No workhours have been added yet. You can add some
+    <a href="{% url 'team:add_worktime_user' user.pk %}">here</a>
+    </p>
+{% endif %}
+
+</div>
+
+{% endblock %}

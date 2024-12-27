@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+<div class="container">
+  <div class="row align-items-center justify-content-around mt-4">
+    <div class="col-auto">
+      <form method="POST" action="{% url 'projects:add_project_category' %}" id="projectcategorysForm">
+        <h2>Add a Project Category</h2>
+        <p style="line-height:1.6em;"></p>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary btn-large">Add</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

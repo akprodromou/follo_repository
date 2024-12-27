@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
+<h1>Delete Comment</h1>
+<br>
+<div class="container">
+  <div class="row">
+    <form method="post">{% csrf_token %}
+        <p>Are you sure you want to delete "{{ object }}"?</p>
+        {% buttons %}
+          <button type="submit" class="btn btn-danger btn-large">Delete</button>
+        {% endbuttons %}
+    </form>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'projects:project_category' task.task_project.project_category.pk %}">{{ task.task_project.project_category }}</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'projects:project_detail' task.task_project.pk %}">{{ task.task_project.project_name }}</a></li>
+      <li class="breadcrumb-item">Tasks</li>
+    </ol>
+  </nav>
+
+  <div class="row justify-content-center align-items-start">
+    <div class="col-auto p-1">
+      <div class="card task-card">
+        <div class="chart-container">
+          <h3 class="white card-description">{{ task.task_description }}
+            <a href="{% url 'team:edit_task_user' task.pk %}">
+              <i class="far fa-edit" style="color:white; font-size:10px">
+              </i>
+            </a>
+          </h3>
+          <table style="width:100%" class="table-sm table-hover">
+            <tr class="white">
+              <td class="table-label align-top">Task project:</td>
+              <td class="align-top">{{ task.task_project }}</td>
+            </tr>
+            <tr class="white">
+              <td class="table-label align-top">Assigned to:</td>
+              <td class="align-top">{{ task.task_asignee }}</td>
+            </tr>
+            <tr class="white">
+              <td class="table-label align-top">Status:</td>
+              <td class="align-top">{{ task.task_status }}</td>
+            </tr>
+            <tr class="white">
+              <td class="table-label align-top">Date created:</td>
+              <td class="align-top">{{ task.task_creation_date|date:'N j, Y' }}</td>
+            </tr>
+            <tr class="white">
+              <td class="table-label align-top">Delivery date:</td>
+              <td class="align-top">{{ task.task_due_date }}</td>
+            </tr>
+            {% if task.task_completion_date %}
+            <tr class="white">
+              <td class="table-label">Date completed:</td>
+              <td class="align-middle">{{ task.task_completion_date|date:'N j, Y' }}</td>
+            </tr>
+            {% endif %}
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-auto mb-2 p-1">
+      <div class="card user-hours">
+        <div class="chart-container text-center">
+          <h6 class="hours-title white">Hours logged</h6>
+          {% if hours_spent.worktime_hour__sum %}
+          <h1 class="hours-number white">{{ hours_spent.worktime_hour__sum }}</h1>
+          {% else %}
+          <h1 class="hours-number white">0</h1>
+          {% endif %}
+          <div class="mb-0">
+            <a href="{% url 'team:add_worktime_task' task.pk %}" class="btn btn-info btn-sm">Add worktime</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<br>
+<br>
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+      <h5>Task comments</h5>
+      <br>
+      <form id="comment_form" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button id="comment_button" type="submit" style="float: right;" class="btn-sm btn-outline-dark">Add comment</button>
+      </form>
+      <br>
+    </div>
+    {% if task_comments %}
+    {% for c in task_comments %}
+    <div class="comment col-12 col-md-10 col-lg-8 pt-4">
+      <a href="{% url 'team:user_detail' c.comment_author.pk %}">
+        <div class="circle" style="background-color:rgba{{ c.comment_author.profile.user_color }};">
+          <span class="black initials" style="cursor:default">
+            {{ c.comment_author.username|first|title }}
+          </span>
+        </div>
+        <span style='margin-left:.6em;'>{{ c.comment_author }}</span>
+      </a>
+      <div class="ml-1 mt-3">
+        <p>{{ c.comment_text }}</p>
+      </div>
+      <div class="row float-right mr-2">
+        <p style="color:grey; font-size:11px">{{ c.comment_created_date }}</p>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock scripts %}

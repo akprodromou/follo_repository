@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 m-2 pl-4 pr-4">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">Search results for "{{ val }}"</li>
+        </ol>
+      </nav>
+
+      <ul>
+        {% for o in object_list %}
+        {% if o.project_number  %}
+        <li><a href="{% url 'projects:project_detail' o.pk %}" class="btn btn-light" role="button">{{ o.project_number }} - {{ o.project_name }}</a></li>
+        {% elif o.task_description %}
+        <li><a href="{% url 'team:task_detail' o.pk %}" class="btn btn-light" role="button">{{ o }}</a></li>
+        {% elif o.subcontractor_name %}
+        <li><a href="{% url 'subcontractors:subcontractor_detail' o.pk %}" class="btn btn-light" role="button">{{ o }}</a></li>
+        {% endif %}
+        {% empty %}
+        <h5>Sorry, no results found!</h5>
+        <p>Go to <a href="{% url 'index' %}">main page</a>.</p>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,47 @@
+
+{% if both_weeks %}
+{% for week, dates in both_weeks %}
+  {% if week %}
+    <table style="width:100%" class="table table-hover table-sm">
+      <h7>{{ dates.0|date:"D d M Y" }} - {{ dates.1|date:"D d M Y" }}</h7>
+      <thead>
+        <tr>
+          <th class="align-middle" scope="col">Project</th>
+          <th class="align-middle" scope="col">Task</th>
+          <th class="align-middle text-center" scope="col">Date</th>
+          <th class="align-middle text-center" scope="col">Hours</th>
+          <th class="align-middle text-center" scope="col">User</th>
+          <th class="align-middle text-center" scope="col">Edit</th>
+          <th class="align-middle text-center" scope="col">Delete</th>
+        </tr>
+      </thead>
+        {% for workhour in week %}
+        <tr>
+          <td class="align-middle">
+            <a href="{% url 'projects:project_detail' workhour.worktime_task.task_project.pk %}">
+            {{ workhour.worktime_task.task_project }}
+            </a>
+          </td>
+          <td class="align-middle">{{ workhour.worktime_task.task_description }}</td>
+          <td class="align-middle text-center" style="width:120px">{{ workhour.worktime_date|date:"d/m/Y" }}</td>
+          <td class="align-middle text-center">{{ workhour.worktime_hour }}</td>
+          <td class="align-middle text-center">{{ workhour.worktime_user }}</td>
+          <td class="align-middle text-center">
+            <a href="{% url 'team:edit_worktime_user' workhour.pk %}" class="btn btn-sm" role="button"><i class="far fa-edit"></i></a>
+          </td>
+          <td class="align-middle text-center">
+            <a href="{% url 'team:delete_worktime_user' workhour.pk %}" class="btn btn-sm">
+              <i class="far fa-trash-alt"></i>
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+  </table>
+<p style="color:grey; font-size:12px">See {{ user_examined }}'s <a href="{% url 'team:worktime_history_user' user_examined.pk %}">worktime history</a></p>
+{% else %}
+    <p>No workhours have been added yet. You can add some
+    <a href="{% url 'team:add_worktime_user' user.pk %}">here</a>.
+    </p>
+{% endif %}

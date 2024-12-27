@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container">
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    <li class="breadcrumb-item">Contacts</li>
+  </ol>
+</nav>
+
+<div class="row justify-content-center">
+  <div class="col-12">
+    <p style="line-height:1.6em;"></p>
+    <h4 class="table-header">Contacts<a href="{% url 'subcontractors:add_contact' %}" class="btn btn-light btn-sm" role="button"> +</a></h4>
+    {% if object_list %}
+    <table style="width:100%"
+      data-classes="table"
+      data-toggle="table"
+      data-locale="en-US"
+      data-pagination="true"
+      data-search="true">
+      <thead>
+        <tr>
+          <th data-sortable="true" data-field="id">Name</th>
+          <th data-sortable="true" data-field="Category">Category</th>
+          <th data-field="Location">Location</th>
+          <th data-field="Phone number">Phone number</th>
+          <th data-field="Contact person">Contact person</th>
+          <th data-field="Comment">Comment</th>
+          <th class="align-middle text-center" data-field="Edit">Edit</th>
+          <th class="align-middle text-center" data-field="Delete">Delete</th>
+        </tr>
+      </thead>
+      {% for subcontractor in object_list %}
+      <tr>
+        <td>{{ subcontractor.subcontractor_name }}</td>
+        <td>{{ subcontractor.subcontractor_job_category }}</td>
+        <td>{{ subcontractor.subcontractor_location }}</td>
+        <td>{{ subcontractor.subcontractor_phone_number }}</td>
+        <td>{{ subcontractor.subcontractor_contact_person }}</td>
+        <td>{{ subcontractor.subcontractor_description }}</td>
+        <td class="align-middle text-center">
+          <a href="{% url 'subcontractors:edit_contact' subcontractor.pk %}" class="btn btn-sm" role="button">
+            <i class="far fa-edit"></i>
+          </a>
+        </td>
+        <td class="align-middle text-center">
+          <a href="{% url 'subcontractors:delete_contact' subcontractor.pk %}" class="btn btn-sm" role="button">
+            <i class="far fa-trash-alt"></i>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+
+  {% else %}
+
+  <p>No contacts have been added yet.</p>
+  <a href="{% url 'subcontractors:add_jobcategory' %}" class="btn btn-light btn-sm" role="button"> Add +</a>
+
+  {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock scripts %}

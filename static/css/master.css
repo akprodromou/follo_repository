@@ -1,0 +1,428 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap');
+@import "content-area.css";
+
+:root {
+  --blue: #01579b;
+  --lightblue: #ccddeb;
+  --darkblue: #013C69;
+  --orange: #EB7311;
+  --lightorange: #fbddc5;
+  --darkorange: #fbddc5;
+  --accent: #fbddc5;
+  --borderRadius: 10px;
+  --border: 0.5px solid lightgrey;
+  --mainFont: 'Manrope', sans-serif;
+  --secondaryFont: 'Inter', sans-serif;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: var(--darkblue);
+}
+
+a:hover {
+  color: #C0C0C0;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+body{
+  font-family: var(--secondaryFont);
+  background: #FDFDFD;
+  font-size: 0.9rem;
+}
+
+body p{
+  font-family: var(--secondaryFont);
+  font-weight: 300;
+}
+
+body li{
+  font-family: var(--secondaryFont);
+  font-weight: 300;
+}
+
+body h1, h2, h3, h4, h5, h6{
+  font-family: var(--mainFont);
+  font-weight: 500;
+}
+
+tr td{
+  font-size: .9rem;
+  font-family: var(--secondaryFont);
+  font-weight: 300;
+}
+
+thead th {
+  font-size: 1rem;
+  font-family: var(--secondaryFont);
+  font-weight: 500;
+}
+
+#main-content {
+  margin: 0px;
+}
+
+#main-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+/* Sidebar styling */
+
+.sideBar {
+  background: #F0F0F0;
+  height: 100%;
+  width: 180px;
+  position: fixed;
+  padding-top: 0px;
+  top: 0;
+  left: 0;
+  overflow: auto;
+}
+
+.sideBar img{
+  width: 100px;
+  padding-top: 10px;
+}
+
+.sideBar nav{
+  padding-top: 120px;
+}
+
+.sideBar a {
+  display: block;
+  color: black;
+  text-decoration: none;
+  padding: 15px 30px;
+  font-weight: 300;
+  transition: all 0.1s ease-in-out;
+}
+
+.sideBar a:hover {
+  background: #E9ECEF;
+}
+
+.sideBar a.active {
+  background: #E9ECEF;
+  border-left: 5px solid var(--accent);
+  padding: 15px 30px 15px 25px;
+}
+
+.sideBar a .fas {
+  color: black;
+  font-size: .8rem;
+  margin-right: .8rem;
+  display: inline-block;
+  width: 1.3rem;
+  position: relative;
+  top: 0px;
+}
+
+#logo{
+  height: 80px;
+  display:block;
+  margin: 0px auto;
+}
+
+#logo a:hover{
+  background: #F0F0F0;
+}
+
+/* End of sidebar styling */
+
+/* Start of header styling */
+
+header{
+  z-index: 100;
+  margin-left: 180px;
+  padding: 5px;
+  background: #F0F0F0;
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  /* Firefox */
+  width: -moz-calc(100% - 180px);
+  /* WebKit */
+  width: -webkit-calc(100% - 180px);
+  /* Opera */
+  width: -o-calc(100% - 180px);
+  /* Standard */
+  width: calc(100% - 180px);
+}
+
+header .nav-tools {
+  height: 50px;
+}
+
+/* Search bar */
+
+header .searchBar{
+  display: inline-block;
+  padding: 5px 5px 5px 0px;
+}
+
+header .searchBar input {
+  background: #F0F0F0;
+  border: none;
+  border-radius: 8px;
+  font-size: .8rem;
+  color: #000000;
+  padding: 10px;
+  font-weight: 300;
+  width: 380px;
+}
+
+header .searchBar input:hover {
+  background: #e3e3e3;
+  transition: all 0.3s ease-in-out;
+}
+
+header .searchBar .fas{
+  color: #aab2b8;
+  padding: 10px 10px 0px 10px;
+}
+
+textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {
+  border-color: none;
+  background: #F0F0F0;
+  outline: 0 none;
+}
+
+#ui-id-3, .ui-widget {
+  /* background: #ffffff none no-repeat;
+  border:0; */
+  font-size: 0.8rem;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.ui-menu, .ui-widget, .ui-widget-content, .ui-autocomplete, .ui-front{
+
+}
+
+.ui-widget.ui-widget-content {
+    border: 1px solid lightgrey;
+}
+
+.ui-menu-item{
+  padding: 5px 0px 5px 0px;
+  border-radius: 15px;
+
+}
+
+.ui-menu-item-wrapper{
+  padding:50px;
+}
+
+/* End of Search bar */
+
+/* User area (right-side of bar) */
+
+header .nav-tools .user-area {
+  float: right;
+  display: inline-block;
+  padding: 5px 0;
+}
+
+header .nav-tools .user-area a {
+  text-decoration: none;
+  vertical-align: top;
+}
+
+/* Drop-down menu */
+
+:root {
+  --avatar-size: 2rem;
+}
+
+header .dropdown {
+  float: right;
+  display: inline-block;
+}
+
+.user-circle {
+  display: inline-block;
+  border-radius: 50%;
+  height: var(--avatar-size);
+  text-align: center;
+  width: var(--avatar-size);
+  font-weight: 300;
+}
+
+.user-circle-team{
+  display: inline-block;
+  border-radius: 50%;
+  height: var(--avatar-size);
+  text-align: center;
+  width: var(--avatar-size);
+  font-weight: 300;
+}
+
+.circle {
+  display: inline-block;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  background: red;
+  text-align: center;
+  border-radius: 50%;
+  position: relative;
+  bottom: 5px;
+}
+
+.initials {
+  font-size: .9rem; /* 50% of parent */
+  line-height: .2rem;
+  position: relative;
+  top: calc(var(--avatar-size) / 7); /* 25% of parent */
+}
+
+.dropdown-menu {
+    font-family: var(--secondaryFont);
+    font-weight: 300;
+    width: 30px;
+}
+
+.dropdown-item{
+  font-size: 0.9rem;
+  font-family: var(--secondaryFont);
+  font-weight: 300;
+}
+
+.login{
+  font-weight: 500;
+}
+
+/* End of Drop-down menu */
+
+/* main body */
+
+#page-content-wrapper{
+  margin-left: 180px;
+  padding-top: 50px;
+}
+
+.content{
+  padding: 40px;
+}
+
+.content a{
+  text-decoration: none;
+}
+
+.breadcrumb {
+  background-color: #F0F0F0;
+}
+
+
+/* Form styling */
+
+.form-group label{
+    font-size: 0.9rem;
+    font-weight: normal;
+    font-weight: 300;
+}
+
+.form-group select{
+    font-size: 0.9rem;
+    font-weight: normal;
+    font-weight: 300;
+}
+
+.form-group input{
+    font-size: 0.9rem;
+    font-weight: normal;
+    font-weight: 300;
+}
+
+.btn-secondary {
+    font-size: 0.9rem;
+    font-weight: normal;
+    font-weight: 300;
+}
+
+.form-group button{
+    font-size: 0.9rem;
+    font-weight: normal;
+    font-weight: 300;
+}
+
+/* On screens that are less than 768px wide, make the sidebar into a topbar */
+@media screen and (max-width: 768px) {
+  #page-content-wrapper{
+    margin-left: 0px;
+    padding-top: 0px;
+  }
+
+  header{
+    margin-left: 0px;
+    width: 100%;
+    position: relative; /* Set the navbar to fixed position */
+    top: 0px;
+  }
+
+  .sideBar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .sideBar a {
+    text-align: left;
+    padding-left: 41%;
+    float: none;
+  }
+
+  #logo a{
+    padding-left: 8.4%;
+  }
+
+  .sideBar a.active {
+    padding-left: 40%;
+  }
+
+  .sideBar img{
+    padding-top: 0px;
+  }
+
+  .sideBar nav{
+    padding-top: 40px;
+  }
+
+  .sideBar nav a{
+    padding-right: 45px;
+  }
+
+  .nav-link{
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-link a{
+    padding: 0px;
+  }
+
+  .sideBar a .fas {
+    margin-right: .2rem;
+  }
+
+}
+
+/* On screens that are less than 480px, display the bar vertically, instead of horizontally */
+@media screen and (max-width: 480px) {
+  .sideBar a {
+    text-align: center;
+    float: none;
+  }
+
+  .sideBar nav{
+    padding-top: 60px;
+  }
+}

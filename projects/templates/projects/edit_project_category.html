@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+
+<form action="{% url 'Follo:add_projectcategory' %}" method="post">
+{% csrf_token %}
+{% for field in form %}
+    <label for="id_{{ field.name }}" class="col-2 col-form-label">
+      {{ field.label }}
+    </label>
+    <div class="col-10">
+      {{ field }}
+    </div>
+{% endfor %}
+<button type="submit" class="btn btn-light" name="button">Add</button>
+
+</form>
+
+{% endblock %}

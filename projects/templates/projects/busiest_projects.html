@@ -1,0 +1,109 @@
+<script>
+  Chart.defaults.global.defaultFontFamily = "'Didact Gothic', sans-serif";
+  Chart.defaults.global.defaultFontColor = 'white';
+  var defaultData2 = []
+  var labels2 = [];
+  var endpoint = '/projects/busiest_projects/'
+  $.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(data){
+      labels2 = data.labels
+      defaultData2 = data.data
+      setChart_Busiest()
+    },
+    error: function(error_data){
+      console.log("error")
+      console.log(error_data)
+    },
+  })
+
+
+// ctx2 chart
+  function setChart_Busiest(){
+    var ctx2 = document.getElementById('busiest_projects');
+    ctx2.height = 40+defaultData2.length*40;
+    var goals_chart = new Chart(ctx2, {
+      type: 'horizontalBar',
+      data: {
+        datasets: [{
+          borderWidth: 0,
+          data: defaultData2,
+          backgroundColor: '#EEF0D1',
+          label: 'Logged hours, past 2 weeks',
+          borderColor: "rgba(0,0,0,0)",
+        }],
+        labels: labels2
+      },
+      options: {
+        layout: {
+            padding: {
+                left: 30,
+                right: 5,
+                top: 0,
+                bottom: 0
+            }
+        },
+        tooltips: {
+            mode: 'nearest'
+        },
+        offset: true,
+        scales: {
+            xAxes: [{
+              ticks: {
+              precision:0,
+              beginAtZero: true,
+              lineHeight: .5,
+              fontSize: 12,
+              fontColor: 'rgba(256, 256, 256, .7)',
+              padding: -3,
+            },
+              display: false,
+                gridLines: {
+                  display: false,
+                  drawBorder: false,
+                },
+            }],
+            yAxes: [{
+              ticks: {
+                mirror: false,
+                beginAtZero: true,
+            },
+              display: true,
+              categoryPercentage: 1,
+              barPercentage: .35,
+              maxBarThickness: 100,
+                stacked: false,
+                gridLines: {
+                  display: false,
+                  drawBorder: false,
+                },
+            }]
+        },
+        plugins: {
+          datalabels: {
+                color: '#ffffff',
+                anchor: 'end',
+                align: 'right',
+                font:{
+                  family: "'Inter', sans-serif",
+                }
+              },
+          p1: false   // disable plugin 'p1' for this instance
+        },
+        legend:{
+          position: 'bottom',
+          display: true,
+          labels: {
+            boxWidth: 7,
+            usePointStyle: true,
+          }
+        },
+        title: {
+          display: false,
+        },
+      }
+    });
+  }
+
+</script>

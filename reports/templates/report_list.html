@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% load bootstrap4 %}
+{% bootstrap_javascript jquery='full' %}
+
+
+<div class="container">
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    <li class="breadcrumb-item">Reports</li>
+  </ol>
+</nav>
+
+<div class="row justify-content-center">
+  <div class="col-12 col-md-10 col-lg-8">
+    <p style="line-height:1.6em;"></p>
+    <h4 class="table-header">Reports<a href="{% url 'reports:add_report' %}" class="btn btn-light btn-sm" role="button"> +</a></h4>
+    {% if object_list %}
+    <table style="width:100%"
+      data-classes="table"
+      data-toggle="table"
+      data-locale="en-US"
+      data-pagination="true"
+      data-search="true">
+      <thead>
+        <tr>
+          <th data-sortable="true" data-field="Date-issued">Date issued</th>
+          <th class="text-center" data-field="Edit-report">Edit</th>
+          <th class="text-center" data-field="Delete-report">Delete</th>
+        </tr>
+      </thead>
+      {% for report in object_list %}
+      <tr>
+        <td>{{ report.report_issued_date }}</td>
+        <td class="align-middle text-center">
+          <a href="{% url 'reports:edit_report' report.pk %}" class="btn btn-sm" role="button">
+            <i class="far fa-edit"></i>
+          </a>
+        </td>
+        <td class="align-middle text-center">
+          <a href="{% url 'reports:delete_report' report.pk %}" class="btn btn-sm" role="button">
+            <i class="far fa-trash-alt"></i>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+
+  {% else %}
+
+  <p>No reports have been added yet.</p>
+  <a href="{% url 'reports:add_report' %}" class="btn btn-light btn-sm" role="button"> Add +</a>
+
+  {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock scripts %}

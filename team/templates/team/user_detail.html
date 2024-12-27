@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+{% load bootstrap4 %}
+{% bootstrap_javascript jquery='full' %}
+
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'team:users_list' %}">Users</a></li>
+    </ol>
+  </nav>
+
+  <div class="row justify-content-center align-items-start">
+    <div class="col-auto">
+      <div class="card user-card">
+        <div class="chart-container">
+          {% if user_examined %}
+          <h3 class="white card-description">{{ user_examined.username }}</h3>
+          <table style="width:100%" class="table-sm table-hover">
+            <tr class="white">
+              <td class="table-label">First name:</td>
+              <td class="align-middle">{{ user_examined.first_name }}</td>
+            </tr>
+            <tr class="white">
+              <td class="table-label">Surname:</td>
+              <td class="align-middle">{{ user_examined.last_name }}</td>
+            </tr>
+            <tr class="white">
+              <td class="table-label">Email:</td>
+              <td class="align-middle">{{ user_examined.email }}</td>
+            </tr>
+            {% if logged_user == user_examined %}
+            <tr class="white">
+              <td class="table-label"><a class="greyed-out" href="{% url 'accounts:edit_user' logged_user.pk %}">Edit</a></td>
+            </tr>
+            {% endif %}
+          </table>
+
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-auto mb-2">
+      <div class="card user-hours">
+        <div class="chart-container">
+          <h6 class="title white">Hours per Project - Past 2 weeks</h6>
+          {% if first_week %}
+          <canvas id="user_hours_graph"></canvas>
+          {% else %}
+          <p class="message white">No hours logged in the past two weeks.</p>
+          {% if logged_user == user_examined %}
+          <p><a href="{% url 'team:add_worktime_user' user_examined.pk %}" class="btn btn-info btn-sm">Add worktime</a></p>
+          {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if user_examined %}
+  <h4 href="{% url 'team:worktime_list_user' user_examined.pk %}">Worktime
+    {% if logged_user == user_examined %}
+    <a href="{% url 'team:add_worktime_user' user.pk %}" class="btn btn-light btn-sm" role="button"> +</a>
+    {% endif %}
+  </h4>
+
+  {% include "team/worktime_list_user.html" %}
+  {% endif %}
+
+  <h4>Projects</h4>
+  {% if projects_user %}
+  <table style="width:100%" class="table table-hover table-sm">
+    <thead>
+      <tr>
+        <th class="align-middle" scope="col">Project</th>
+        <th class="align-middle" scope="col">Status</th>
+        <th class="align-middle" scope="col">Delivery date</th>
+      </tr>
+    </thead>
+    {% for p in projects_user %}
+    <tr>
+      <td class="align-middle">
+        <a href="{% url 'projects:project_detail' p.pk %}">
+          {{ p }}
+        </a>
+      </td>
+      <td class="align-middle">{{ p.project_stage }}</td>
+      <td class="align-middle">{{ p.project_delivery_date|date:"D d M Y" }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p>No projects assigned yet.</p>
+  {% endif %}
+  <br>
+
+  <h4>Tasks
+    <a href="{% url 'team:add_task_user' user_examined.pk %}" class="btn btn-light btn-sm" role="button"> +</a>
+  </h4>
+  {% if pending_tasks %}
+  <table style="width:100%" class="table table-hover table-sm">
+    <thead>
+      <tr>
+        <th class="align-middle" scope="col">Project</th>
+        <th class="align-middle" scope="col">Description</th>
+        <th class="align-middle" scope="col">Person</th>
+        <th class="align-middle" scope="col">Deadline</th>
+        <th class="align-middle text-center" scope="col">Mark as complete</th>
+        <th class="align-middle text-center" scope="col">Edit</th>
+        <th class="align-middle text-center" scope="col">Delete</th>
+      </tr>
+    </thead>
+    {% if tasks %}
+    {% for t in tasks %}
+    {% if t.task_status == 'Pending' %}
+    {% if t.is_past_due %}
+      <tr class='clickable-row' data-href="{% url 'team:task_detail' t.pk %}" style="background-color:#f8ddda">
+      {% elif t.is_close_due %}
+      <tr class='clickable-row' data-href="{% url 'team:task_detail' t.pk %}" style="background-color:#ffedcc">
+      {% else %}
+      <tr class='clickable-row' data-href="{% url 'team:task_detail' t.pk %}" style="background-color:#e4ede4">
+      {% endif %}
+        <td class="align-middle">{{ t.task_project }}</td>
+        <td class="align-middle">{{ t.task_description }}</td>
+        <td class="align-middle">{{ t.task_asignee }}</td>
+        <td class="align-middle">{{ t.task_due_date|date:"D d M Y" }}</td>
+        <td class="align-middle text-center">
+          <form class="" action="{% url 'team:update_task_status' t.id %}"  method="post">
+            {% csrf_token %}
+            <button type="submit" name="button">
+              <i type="submit" class="fas fa-check">
+              </i>
+            </button>
+          </form>
+        </td>
+        <td class="align-middle text-center">
+          <a href="{% url 'team:edit_task_user' t.pk %}" class="btn btn-sm" role="button"><i class="far fa-edit"></i></a>
+        </td>
+        <td class="align-middle text-center">
+          <a href="{% url 'team:delete_task_user' t.pk %}" class="btn btn-sm">
+            <i class="far fa-trash-alt"></i>
+          </a>
+        </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+      {% endif %}
+    </table>
+    {% else %}
+    <p>No tasks have been assigned.</p>
+    {% endif %}
+    {% if user_examined %}
+    <p style="color:grey; font-size:12px">See {{ user_examined.username }}'s <a href="{% url 'team:user_task_history' user_examined.pk %}">task history</a></p>
+    {% endif %}
+
+    {% endblock body %}
+    <!-- Add Charts -->
+    {% block scripts %}
+
+    <script type="text/javascript">
+    $(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.document.location = $(this).data("href");
+        });
+    });
+    </script>
+
+    {% include "team/user_hours_graph.html" %}
+
+    {% endblock  %}

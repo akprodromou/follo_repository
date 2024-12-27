@@ -1,0 +1,111 @@
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+<script>
+  Chart.defaults.global.defaultFontColor = 'white';
+  var defaultData = []
+  var labels = [];
+  var endpoint = '/projects/project_hours_graph' + "/" + {{ project.id }};
+  $.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(data){
+      labels = data.labels
+      defaultData = data.data
+      setChart_Team()
+    },
+    error: function(error_data){
+      console.log("error")
+      console.log(error_data)
+    },
+  })
+
+// ctx2 chart
+  function setChart_Team(){
+    var ctx2 = document.getElementById('project_hours_graph');
+    ctx2.height = 40+defaultData.length*35;
+    ctx2.width = 200;
+    var goals_chart = new Chart(ctx2, {
+      type: 'horizontalBar',
+      data: {
+        datasets: [{
+          borderWidth: 0,
+          data: defaultData,
+          backgroundColor: ['#EFD4A0','#ABAEBA','#EDE4D3','#6B8D73','#F0D8DA','#A38488','#EEF0D1','#C9DFF2'],
+          borderColor: "rgba(255, 255, 255, 0)",
+          label: 'Total hours logged'
+        }],
+        labels: labels
+      },
+      options: {
+        tooltips: {
+            mode: 'nearest'
+        },
+        scales: {
+            xAxes: [{
+              ticks: {
+              precision:0,
+              beginAtZero: true,
+              lineHeight: .5,
+              fontSize: 12,
+              fontColor: 'white',
+              padding: -3,
+            },
+              display: false,
+                stacked: false,
+                gridLines: {
+                  display: false,
+                  drawBorder: false,
+                },
+            }],
+            yAxes: [{
+              ticks: {
+                mirror: false,
+                fontColor: 'white',
+                beginAtZero: true,
+            },
+              display: true,
+              categoryPercentage: 1,
+              barPercentage: .35,
+              maxBarThickness: 40,
+                stacked: false,
+                gridLines: {
+                  display: false,
+                  drawBorder: false,
+                },
+            }]
+        },
+        plugins: {
+          datalabels: {
+                anchor: 'end',
+                align: 'right',
+                color: '#FFFFFF',
+                font:{
+                  family: "'Inter', sans-serif",
+                }
+              },
+          p1: false   // disable plugin 'p1' for this instance
+        },
+        datalabels: {
+            display: true,
+            align: 'center',
+            anchor: 'center'
+         },
+        legend:{
+          position: 'top',
+          display: true,
+          labels: {
+            boxWidth: 7,
+            usePointStyle: true,
+          }
+        },
+        title: {
+          display: false,
+          text: 'Team Tasks per Category',
+          fontSize: 14,
+          fontStyle: 'bold',
+        },
+        // cutoutPercentage: 100,
+      }
+    });
+  }
+
+</script>

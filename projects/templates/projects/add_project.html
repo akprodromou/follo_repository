@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+{% bootstrap_javascript jquery='full' %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css">
+<style>
+.select2-search__field{
+  line-height: 31px !important;
+}
+
+</style>
+{{ form.media }}
+
+
+<div class="container">
+  <div class="row align-items-center justify-content-around mt-4">
+    <div class="col-auto">
+      <form method="POST" action="{% url 'projects:add_project' projectcategory.projectcategory_number %}" id="projectForm">
+        <h2>Add a Project</h2>
+        <p style="line-height:1.6em;"></p>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary btn-large">Add</button>
+        <p style="line-height:1.6em;"></p>
+        <p style="margin-left:0px; font-size:0.9em">Do you want to add a new <strong><a href="{% url 'projects:add_project_category' %}"> Project Category</a></strong>?</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock body %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.js-multiple').select2();
+  });
+
+$.fn.select2.defaults.set( "theme", "bootstrap" );
+</script>
+
+{% endblock scripts %}

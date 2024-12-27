@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
+<h1>Edit Project</h1>
+
+<br>
+<div class="container">
+  <div class="row">
+    <form method="POST" action="{% url 'projects:edit_project' project.pk %}" id="projectForm">
+    	{% csrf_token %}
+    	{% bootstrap_form form %}
+    	{% buttons %}
+      Join project?
+    		<button type="submit" class="btn btn-primary btn-large">Join</button>
+    	{% endbuttons %}
+    </form>
+  </div>
+</div>
+
+{% endblock %}

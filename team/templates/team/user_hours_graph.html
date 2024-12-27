@@ -1,0 +1,76 @@
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+<script>
+  Chart.defaults.global.defaultFontColor = 'white';
+  var defaultData = []
+  var labels = [];
+  var endpoint = '/team/user_hours_graph' + "/" + {{ user_examined.id }};
+  $.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(data){
+      labels = data.labels
+      defaultData = data.data
+      setChart_Team()
+    },
+    error: function(error_data){
+      console.log("error")
+      console.log(error_data)
+    },
+  })
+
+// ctx2 chart
+  function setChart_Team(){
+    var ctx2 = document.getElementById('user_hours_graph');
+    var goals_chart = new Chart(ctx2, {
+      type: 'doughnut',
+      data: {
+        datasets: [{
+          borderWidth: 0,
+          data: defaultData,
+          backgroundColor: ['#EFD4A0','#ABAEBA','#EDE4D3','#6B8D73','#F0D8DA','#A38488','#EEF0D1','#C9DFF2'],
+          borderColor: "rgba(255, 255, 255, 0)",
+          label: 'Logged hours, past 2 weeks'
+        }],
+        labels: labels
+      },
+      options: {
+        tooltips: {
+            mode: 'nearest'
+        },
+        scales: {
+
+        },
+        plugins: {
+          datalabels: {
+              color: '#EB7311',
+              font:{
+                family: "'Inter', sans-serif",
+              }
+            },
+          p1: false   // disable plugin 'p1' for this instance
+        },
+        datalabels: {
+            display: true,
+            align: 'center',
+            anchor: 'center'
+         },
+        legend:{
+          position: 'top',
+          display: true,
+          labels: {
+            boxWidth: 7,
+            usePointStyle: true,
+          }
+        },
+        title: {
+          display: false,
+          text: 'Team Tasks per Category',
+          fontSize: 14,
+          fontStyle: 'bold',
+        },
+        // cutoutPercentage: 100,
+      }
+    });
+  }
+
+</script>

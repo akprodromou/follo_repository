@@ -1,0 +1,49 @@
+<!-- {% load widget_tweaks %} -->
+
+<html>
+
+<head>
+  <title>USP Project Monitoring</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'Follo/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'Follo/css/style.css' %}">
+</head>
+
+{% if form.errors %}
+<p>Please fill in all information required.</p>
+{% endif %}
+
+<section id="cover" class="min-vh-100">
+  <div id="cover-caption">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
+          <h3 class="display-5 py-2 text-truncate">Let's get started.</h3>
+          <div class="px-4">
+            <form action="{% url 'Follo:add_asignee' %}" method="post">
+              {% csrf_token %}
+              {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+              {% endfor %}
+              {% for field in form.visible_fields %}
+              <label for="id_{{ field.name }}" class="col-sm-6 col-form-label">
+                {{ field.label }}
+              </label>
+              <div class="col-sm-30">
+                {{ field|add_class:'form-control' }}
+                {% for error in field.errors %}
+                <span class="help-block">{{ error }}</span>
+                {% endfor %}
+              </div>
+              {% endfor %}
+              <button type="submit" class="btn btn-light" name="button">Add</button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</html>

@@ -1,0 +1,309 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_javascript jquery='full' %}
+{% block body %}
+
+
+
+{% if user.is_authenticated %}
+<!-- Add Task Modal -->
+{% include "add_task_index.html" %}
+<!-- end of Add Task Modal -->
+
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    </ol>
+  </nav>
+
+
+  <div class="row justify-content-around align-items-start">
+    <div class="col-lg-8 columnOne">
+      <div class="row justify-content-around">
+        <div class="col-auto">
+            <div class="card task-chart">
+              <div class="chart-container">
+                <h6 class="title white">Tasks<span><button class="add_task_popup white"
+                  data-toggle="modal" data-target="#addTaskModal"> +</button></span></h6>
+                <canvas id="task-chart" width="180" height="180"></canvas>
+              </div>
+          </div>
+        </div>
+        <div class="col-sm ml-0 pl-0">
+          <div class="row justify-content-center align-items-center">
+            <div class="col-auto h-25 m-0 p-0">
+              <div class="card todo report-status">
+                <div class="chart-container">
+                  {% if weekly_report %}
+                  <a href="{% url 'reports:edit_report' weekly_report.0.pk %}"><i type="submit black" class="far fa-check-circle"></i></a>
+                  <p class="todoTitle black">Weekly Report</p>
+                  <p class="todoText black">Status:<br>Submitted</p>
+                  {% else %}
+                  <a href="{% url 'reports:add_report' %}"><i type="submit black" class="far fa-times-circle"></i></a>
+                  <p class="todoTitle black">Weekly Report</p>
+                  <p class="todoText black">Submit by:<br>{{ report_day|date:"D d M" }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="col-auto h-25 m-0 p-0">
+              <div class="card todo work-hours">
+                <div class="chart-container">
+                  {% if daily_worktime|length %}
+                  <a href="{% url 'team:add_worktime_user' user.id %}"><i type="submit" class="black far fa-check-circle"></i></a>
+                  <p class="black todoTitle">Work hours</p>
+                  <p style="line-height:0.25em;"><br></p>
+                  <p class="black todoText">Submit: Daily</p>
+                  <p class="black todoText">Daily total: {{ total_daily_worktime.worktime_hour__sum }}</p>
+                  {% else %}
+                  <a href="{% url 'team:add_worktime_user' user.id %}"><i class="black far fa-times-circle"></i></a>
+                  <p class="black todoTitle">Work hours</p>
+                  <p style="line-height:0.15em;"><br></p>
+                  <p class="black todoText">Submit:<br>daily</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-100"></div>
+        <div class="col-12 mr-0 pl-3 pr-3 pt-2 pb-2">
+          <section class="middle">
+              <div class="card recent-activity">
+                <div class="chart-container">
+                  <div class="groupHeader">
+                    <h6 class="white">Recent Team Activity<span><a href="{% url 'team:team_activity' %}"><i class="white far fa-calendar-alt"></i></a></span></h6>
+                  </div>
+                  {% if recently_completed_tasks %}
+                  {% for t in recently_completed_tasks %}
+                  <p class="white"><a class="white" href="{% url 'team:user_detail' t.task_asignee.pk %}">@{{ t.task_owner }}</a>
+                    {% if t.task_completion_date %}
+                    completed
+                    <a class="white" href="{% url 'team:task_detail' t.pk %}">"{{ t.task_description }}"</a>
+                    <span class="white">- {{ t.task_completion_date }}</span></p>
+                    {% else %}
+                    created
+                    <a class="white" href="{% url 'team:task_detail' t.pk %}">"{{ t.task_description }}"</a>
+                    <span class="white">- {{ t.task_creation_date }}</span></p>
+                    {% endif %}
+                    {% endfor %}
+                  {% else %}
+                  <p class="white">No recent activity.</p>
+                  {% endif %}
+                </div>
+              </div>
+          </section>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 columnTwo">
+      <div class="row justify-content-center align-items-start">
+        <div class="col-auto mb-2">
+          <div class="card projects-timeline">
+            <div class="chart-container">
+              <h6 class="white">Project Deadlines</h6>
+              {% if projects_user %}
+              <div class="timeline">
+                <ul>
+                  <li class="today white">
+                    <div class="timeline-content">
+                      <p class="title white">Today</p>
+                    </div>
+                    <div class="timeline-time">
+                      <p class="subtitle white">
+                        {% now 'N j, Y' %}
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              {% if approaching_projects %}
+              {% for a in approaching_projects|slice:":3" %}
+              <!-- timeline code start -->
+              <div class="timeline">
+                <ul>
+                  <li class="future">
+                    <div class="timeline-content">
+                      <p class="title"><a class="white" href="{% url 'projects:project_detail' a.pk %}">{{ a }}</a></p>
+                    </div>
+                    <div class="timeline-time">
+                      <p class="white subtitle">{{ a.project_delivery_date }}</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <!-- timeline code end -->
+              {% endfor %}
+              {% endif %}
+              {% else %}
+              <p class="white">You haven't joined any projects yet.
+              <br>
+              <br>
+              <a href="{% url 'projects:project_categories_list' %}" class="btn btn-info btn-sm">Join a project</a>
+              </p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-auto mb-2">
+          <div class="card team-activity">
+            <div class="chart-container">
+              <h6 class="title white">Team Tasks per Category</h6>
+              {% if pending_tasks %}
+              <canvas id="team-activity" width="200" height="200"></canvas>
+              {% else %}
+              <p class="white">No open tasks.
+                <br>
+                <br>
+                <a data-toggle="modal" data-target="#addTaskModal" class="btn btn-info btn-sm">Add a task</a>
+              </p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w-100"></div>
+    <div class="col-12 m-2 pl-4 pr-4">
+      <section class="bottom">
+          <!-- Projects area -->
+          <h5 class="table-header">My Projects</h5>
+          {% if projects_user %}
+          <table style="width:100%" class="table table-hover justify-content-md-center">
+            <thead>
+              <tr>
+                <th class="align-middle" scope="col">Number</th>
+                <th class="align-middle" scope="col">Name</th>
+                <th class="align-middle" scope="col">Category</th>
+                <th class="align-middle text-center" scope="col">Open tasks</th>
+                <th class="align-middle" scope="col">Stage</th>
+                <th class="align-middle" scope="col">Delivery date</th>
+              </tr>
+            </thead>
+            {% for p in projects_user %}
+            <tr class='clickable-row' data-href="{% url 'projects:project_detail' p.pk %}">
+              <td class="align-middle">{{ p.project_number }}</td>
+              <td class="align-middle">{{ p.project_name }}</td>
+              <td class="align-middle">{{ p.project_category.projectcategory_name }}</td>
+              <td class="align-middle text-center">{% if p.project_tasks.task_status == 'Pending' %}{{ p.project_tasks|length }}{% else %}None{% endif %}</td>
+              <td class="align-middle">{{ p.project_stage }}</td>
+              <td class="align-middle">{{ p.project_delivery_date }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+          {% else %}
+          <p>You have joined any projects yet! Join one <a href="{% url 'projects:project_categories_list' %}">here</a>.</p>
+          {% endif %}
+          <!-- End of Projects area -->
+          <br>
+          <!-- Tasks area -->
+          <div class="w-100"></div>
+            <h5 class="table-header">My Tasks
+              <button class="black add_task_popup" data-toggle="modal" data-target="#addTaskModal"> +</button>
+            </h5>
+            {% if pending_tasks %}
+            <table id="Tasks" style="width:100%" class="table table-hover justify-content-md-center">
+              <thead>
+                <tr>
+                  <th class="align-middle" scope="col">Project</th>
+                  <th class="align-middle" scope="col">Description</th>
+                  <th class="align-middle" scope="col">Person</th>
+                  <th class="align-middle" scope="col">Deadline</th>
+                  <th class="align-middle text-center" scope="col">Mark as complete</th>
+                  <th class="align-middle text-center" scope="col">Edit</th>
+                  <th class="align-middle text-center" scope="col">Delete</th>
+                </tr>
+              </thead>
+              {% if user_tasks %}
+              {% for t in user_tasks %}
+              {% if t.task_status == 'Pending' %}
+              {% if t.is_past_due %}
+              <tr style="background-color:#f8ddda">
+              {% elif t.is_close_due %}
+              <tr style="background-color:#fff4e1">
+              {% else %}
+              <tr style="background-color:#e4ede4">
+              {% endif %}
+              <td class="align-middle">{{ t.task_project }}</td>
+              <td class="align-middle"><a href="{% url 'team:task_detail' t.pk %}"><p class="text-description">{{ t.task_description }}</p></a></td>
+              <td class="align-middle">{{ t.task_asignee }}</td>
+              <td class="align-middle"> {{ t.task_due_date }}</td>
+              <td class="align-middle text-center task-update">
+              <form action="{% url 'update_task_status' t.id %}"  method="post">
+                {% csrf_token %}
+                <button type="submit" name="button">
+                  <a href="#">
+                    <i type="submit" class="fas fa-check"></i>
+                  </a>
+                </button>
+              </form>
+              </td>
+              <td class="align-middle text-center">
+                <a href="{% url 'team:edit_task_user' t.pk %}" class="btn btn-sm" role="button"><i class="far fa-edit"></i></a>
+              </td>
+              <td class="align-middle text-center">
+                <a href="{% url 'team:delete_task_user' t.pk %}" class="btn btn-sm">
+                  <i class="far fa-trash-alt"></i>
+                </a>
+              </td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+              {% endif %}
+            </table>
+            {% else %}
+              <p>No tasks assigned yet.</p>
+          {% endif %}
+        </section>
+      </div>
+    </div>
+  </div>
+
+
+<!-- End of task area -->
+<!-- end of user having signed-in -->
+{% else %}
+<!-- if user isn't signed in -->
+<div class="row justify-content-around align-items-start">
+  <div class="col-10 col-md-8 col-lg-6 mt-3">
+    <h2>Welcome to follo!</h2>
+    <p>Organize, manage and follow your projects easily. Please <strong><a href="{% url 'login' %}">login</a></strong> or <strong><a href="{% url 'accounts:signup' %}">sign up</a></strong> to start.</p>
+  </div>
+</div>
+{% endif %}
+<!-- end of main content div -->
+
+{% endblock body %}
+<!-- end of body block -->
+
+
+<!-- Scripts go below -->
+{% block scripts %}
+<script type="text/javascript">
+  $("#task-chart").click(function() {
+    $('html,body').animate({
+      scrollTop: $("#Tasks").offset().top},
+      800);
+    });
+
+    $(document).ready(function($) {
+      $(".clickable-row").click(function() {
+        window.document.location = $(this).data("href");
+      });
+    });
+
+    $(".todo").click(function() {
+      window.location = $(this).find("a").attr("href");
+      return false;
+    });
+
+  </script>
+  <script src="http://vast-engineering.github.io/jquery-popup-overlay/jquery.popupoverlay.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+  {% include "users_task_chart.html" %}
+  {% include "team_tasks_category.html" %}
+
+  {% endblock scripts %}
+  <!-- end of scripts -->

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
+<div class="container">
+  <div class="row align-items-center justify-content-around mt-4">
+    <div class="col-12 col-md-8 col-lg-6">
+      <h2>Edit Task</h2>
+      <form method="POST" action="{% url 'team:edit_task_user' task.pk %}" id="taskForm">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary btn-large">Save</button>
+        {% endbuttons %}
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

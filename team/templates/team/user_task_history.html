@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'team:users_list' %}">Users</a></li>
+  </ol>
+</nav>
+
+<div class="container">
+  <div class="row justify-content-around align-items-start">
+    <div class="col">
+
+      <br>
+      {% if user %}
+      <h4>Task history for {{ user }}</h4>
+      {% if object_list %}
+        <table style="width:100%" class="table table-hover table-sm mt-3">
+          <thead>
+            <tr>
+              <th class="align-middle text-center" scope="col">Description</th>
+              <th class="align-middle text-center" scope="col">Person</th>
+              <th class="align-middle text-center" scope="col">Deadline</th>
+              <th class="align-middle text-center" scope="col">Status</th>
+              <th class="align-middle text-center" scope="col">Edit</th>
+              <th class="align-middle text-center" scope="col">Delete</th>
+            </tr>
+          </thead>
+          {% for t in object_list %}
+          {% if t.task_status == 'Completed' %}
+          <tr class='clickable-row' data-href="{% url 'team:task_detail' t.pk %}" style="background-color:#E8E8E8">
+          {% elif t.is_past_due %}
+          <tr class='clickable-row' data-href="{% url 'team:task_detail' t.pk %}" style="background-color:#f8ddda">
+          {% elif t.is_close_due %}
+          <tr class='clickable-row' data-href="{% url 'team:task_detail' t.pk %}" style="background-color:#ffedcc">
+          {% else %}
+          <tr class='clickable-row' data-href="{% url 'team:task_detail' t.pk %}" style="background-color:#e4ede4">
+          {% endif %}
+          <td class="align-middle text-center">{{ t.task_description }}</td>
+          <td class="align-middle text-center">{{ t.task_owner }}</td>
+          <td class="align-middle text-center">{{ t.task_due_date }}</td>
+          <td class="align-middle text-center">{{ t.task_status }}</td>
+          <td class="align-middle text-center">
+            <a href="{% url 'team:edit_task_user' t.pk %}" class="btn btn-sm" role="button"><i class="far fa-edit"></i></a>
+          </td>
+          <td class="align-middle text-center">
+            <a href="{% url 'team:delete_task_user' t.pk %}" class="btn btn-sm">
+              <i class="far fa-trash-alt"></i>
+            </a>
+          </td>
+          </tr>
+          {% endfor %}
+        </table>
+
+        {% else %}
+          <p>No tasks have been assigned to {{ user }}.</p>
+        {% endif %}
+      {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% endblock body %}

@@ -1,0 +1,27 @@
+{% extends 'Follo/base.html' %}
+
+{% block body %}
+
+  <div class="container">
+    <form action="{% url 'Follo:add_task' project_number_q %}" method="post">
+      <br>
+      <br>
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="form-group row">
+        <label for="id_{{ field.name }}" class="col-2 col-form-label"
+        style="width: 140px; ">
+          {{ field.label }}
+        </label>
+        <div class="col-10">
+          {{ field }}
+        </div>
+      </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-light" name="button">Save</button>
+
+    </form>
+  </div>
+
+{% endblock %}

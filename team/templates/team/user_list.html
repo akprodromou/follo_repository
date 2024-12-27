@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% load bootstrap4 %}
+{% bootstrap_javascript jquery='full' %}
+
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+      <li class="breadcrumb-item">Users</li>
+    </ol>
+  </nav>
+
+  <div class="row justify-content-center">
+    <div class="col-12 m-2 pl-4 pr-4">
+      {% if user_list %}
+      <table style="width:100%" class="table table-hover table-sm">
+        <thead>
+          <tr>
+            <th class="align-middle" scope="col">Username</th>
+            <th class="align-middle" scope="col">First name</th>
+            <th class="align-middle" scope="col">Last name</th>
+            <th class="align-middle" scope="col">Email</th>
+            <th class="align-middle text-center" scope="col">Projects</th>
+          </tr>
+        </thead>
+        {% for u in user_list %}
+        <tr class='clickable-row' data-href="{% url 'team:user_detail' u.pk %}" >
+          <td class="align-middle">{{ u.username }}</td>
+          <td class="align-middle">{{ u.first_name }}</td>
+          <td class="align-middle">{{ u.last_name }}</td>
+          <td class="align-middle">{{ u.email }}</td>
+          <td class="align-middle text-center">{{ u.user_member_projects.count }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <a href="{% url 'accounts:signup' %}" class="btn btn-light btn-sm" role="button">Add user +</a>
+
+      {% else %}
+
+      <p>No users have been added yet. You first need to define</p>
+      <a href="{% url 'accounts:signup' %}" class="btn btn-light btn-sm" role="button">Add user +</a>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $(document).ready(function($) {
+      $(".clickable-row").click(function() {
+        window.document.location = $(this).data("href");
+      });
+    });
+  </script>
+
+{% endblock scripts %}

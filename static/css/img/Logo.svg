@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 21 22.8" style="enable-background:new 0 0 21 22.8;" xml:space="preserve">
+<style type="text/css">
+	.st0{
+	fill:#01579B;
+	animation-duration: 2s;
+	animation-name: colorChange;
+  animation-iteration-count: 4;
+	animation-timing-function: ease;
+	animation-direction: alternate;
+	}
+
+	.st0A{
+	fill:#01579B;
+	}
+
+	@keyframes colorChange {
+	from {fill: #01579b;}
+  to {fill: #EB7311;}
+	}
+	.st1{display:none;enable-background:new    ;}
+	.st2{font-family:'NeueHaasUnicaW06-Regular';}
+	.st3{font-size:27.9337px;}
+</style>
+<g>
+	<circle class="st0" cx="6.5" cy="17.4" r="2.3"/>
+	<rect x="4.2" y="3.1" class="st0A" width="12.6" height="3.8"/>
+	<rect x="4.2" y="9.3" class="st0A" width="10.1" height="3.8"/>
+</g>
+<text transform="matrix(1 0 0 1 1.5132 19.5799)" class="st1 st2 st3">F</text>
+</svg>

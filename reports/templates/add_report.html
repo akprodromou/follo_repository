@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block body %}
+
+{% load bootstrap4 %}
+{% bootstrap_javascript jquery='full' %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css">
+<style>
+.select2-container {
+  width: 120px;
+
+}
+.select2-search__field{
+  line-height: 31px !important;
+  margin-left: 0px !important;
+}
+.form-group{
+  margin: 8px;
+}
+</style>
+
+{{ formset.media }}
+
+<div class="container">
+  <div class="row align-items-center justify-content-around mt-4">
+    <div class="col-12 form-group">
+      <h3>Create report</h3>
+      <form method="POST" id="reportForm">
+
+        {{ formset.management_form }}
+        {% csrf_token %}
+        <div class="row col-12 col-md-4">
+        {% bootstrap_form reportform %}
+        </div>
+        {% for form in formset %}
+
+        <div class="report-form m-3">
+          <div class="row">
+            <h4>Action</h4>
+          </div>
+          <div class="row">
+          {% bootstrap_form form %}
+          </div>
+        </div>
+        {% endfor %}
+        <button id="add-form" type="button" class="btn btn-outline-primary ml-2 mb-4">Add action</button>
+        <br>
+        <p>
+          <button type="submit" class="btn btn-primary btn-large">Save</button>
+          <a href="javascript:window.history.back()"><button type="button" class="btn btn-default btn-large">Cancel</button></a>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.js-multiple').select2();
+  });
+$.fn.select2.defaults.set( "theme", "bootstrap" );
+</script>
+
+<script type="text/javascript">
+  let reportForm = document.querySelectorAll(".report-form")
+  let container = document.querySelector("#reportForm")
+  let addButton = document.querySelector("#add-form")
+  let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+
+  let formNum = reportForm.length-1
+  addButton.addEventListener('click', addForm)
+
+  function addForm(e){
+    e.preventDefault()
+
+    let newForm = reportForm[0].cloneNode(true)
+    let formRegex = RegExp(`form-(\\d){1}-`,'g')
+
+    formNum++
+    newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+    container.insertBefore(newForm, addButton)
+
+    totalForms.setAttribute('value', `${formNum+1}`)
+  }
+
+</script>
+
+{% endblock scripts %}

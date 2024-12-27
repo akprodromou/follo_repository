@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+
+
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'team:users_list' %}">Users</a></li>
+      <li class="breadcrumb-item">Team Activity</li>
+    </ol>
+  </nav>
+  <div class="row justify-content-around align-items-start">
+    <div class="col">
+      <br>
+      <h4>Recent Team Activity</h4>
+      <br>
+      {% if combined_list %}
+        {% for o in combined_list %}
+        <h5>{{ o.task_project }}</h5>
+        <p><a href="{% url 'team:user_detail' o.task_asignee.pk %}">
+          <div class="circle" style="background-color:rgba{{ o.task_owner.profile.user_color }};">
+            <span class="black initials" style="cursor:default">
+              {{ o.task_owner.username|first|title }}
+            </span>
+          </div>
+          <span style='margin-left:.6em;'>{{ o.task_owner }}</span>
+          </a>
+          {% if o.task_completion_date %}
+          completed
+          <a href="{% url 'team:task_detail' o.pk %}">{{ o.task_description }}</a>
+          <span style="color:#A9A9A9">- {{ o.task_completion_date }}</span>
+          {% else %}
+          created
+          <a href="{% url 'team:task_detail' o.pk %}">{{ o.task_description }}</a>
+          <span style="color:#A9A9A9">- {{ o.task_creation_date }}</span>
+          {% endif %}
+        </p>
+        {% endfor %}
+      {% else %}
+        <p>No recent activity.</p>
+      {% endif %}
+        </div>
+    </div>
+  </div>
+
+  {% endblock body %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
+
+<div class="container">
+  <div class="row align-items-center justify-content-around mt-4">
+    <div class="col-auto">
+      <h2>Edit Contact</h2>
+      <form method="POST" action="{% url 'subcontractors:edit_contact' subcontractor.pk %}" id="subcontractorForm">
+        <p style="line-height:1.6em;"></p>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary btn-large">Save</button>
+        <a href="{% url 'subcontractors:delete_contact' subcontractor.pk %}" class="btn btn-danger btn-large">Delete</a>
+        <p style="line-height:1.6em;"></p>
+        <p style="margin-left:0px; font-size:0.9em">Do you want to add a new <strong><a href="{% url 'subcontractors:add_jobcategory' %}"> Category</a></strong>?</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

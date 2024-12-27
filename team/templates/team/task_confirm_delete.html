@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+<h3>Delete task?</h3>
+
+<div class="posts">
+	<!-- {% include "tasks/_post.html" with post=object hide_delete=True %} -->
+</div>
+
+<form method="POST">
+	{% csrf_token %}
+	<input type="submit" value="Confirm Delete" class="btn btn-danger btn-large">
+	<a href="{% url 'index' %}" class="btn btn-light btn-large">Cancel</a>
+</form>
+
+
+{% endblock %}

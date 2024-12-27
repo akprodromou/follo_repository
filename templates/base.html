@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+{% load bootstrap4 %}
+{% url 'index' as start %}
+{% url 'projects:project_categories_list' as projects %}
+{% url 'subcontractors:contact_list' as subcontractors %}
+{% url 'team:users_list' as team %}
+{% url 'reports:reports_list' as reports %}
+{% url 'login' as login %}
+{% load static %}
+
+{% bootstrap_javascript jquery='full' %}
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" type="image/png" href="{% static '/css/img/favicon.ico' %}"/>
+  <title>follo</title>
+  {% include "css_links.html" %}
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <div class="sideBar">
+    <!-- Logo -->
+    <div id="logo">
+      <a href="{% url 'index' %}">
+        <img id="logo" src="{% static '/css/img/Logo.svg' %}" alt="logo" />
+      </a>
+    </div>
+    <!-- end of Logo -->
+    <nav>
+      <a class="nav-link {% if request.path == start %} active {% elif '/search/' in request.path %} active {% endif %}" href="{% url 'index' %}">
+        <i class="fas fa-home"></i>
+        Home
+      </a>
+      <a class="nav-link {% if '/projects/' in request.path %} active {% endif %}" href="{% url 'projects:project_categories_list' %}">
+        <i class="fas fa-city"></i>
+        Projects
+      </a>
+      <a class="nav-link {% if '/team/' in request.path %} active {% elif '/accounts/' in request.path %} active {% endif %}" href="{% url 'team:users_list' %}">
+        <i class="fas fa-user-friends"></i>
+        Team
+      </a>
+      <a class="nav-link {% if '/subcontractors/' in request.path %} active {% endif %}" href="{% url 'subcontractors:contact_list' %}">
+        <i class="fas fa-address-book"></i>
+        Agenda
+      </a>
+      <a class="nav-link {% if '/reports/' in request.path %} active {% endif %}" href="{% url 'reports:reports_list' %}">
+        <i class="fas fa-book"></i>
+        Reports
+      </a>
+      </nav>
+  </div>
+  <!-- End of Sidebar -->
+
+  <!-- Navbar -->
+  <header>
+    <div class="nav-tools">
+      {% if user.is_authenticated %}
+      <!-- search bar -->
+      <div class="searchBar">
+        <form action="{% url 'projectsearch' %}" method="get" accept-charset="utf-8">
+          <button type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+          <input type="text" id='searchInput' name="q" placeholder="Search">
+        </form>
+      </div>
+      <!-- end of search bar -->
+      <!-- initial in circle w/ dropdown -->
+      <div class="dropdown">
+        <span class="nav-link pl-0" id="dropdownMenuButton2" data-toggle="dropdown">
+          <div class="user-circle" style="background-color:rgba{{ user.profile.user_color }};">
+            <span class="black initials" style="cursor:default">
+              {{ user.username|first|title }}
+            </span>
+          </div>
+        </span>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton2" id="dropdownMenu">
+          <a class="dropdown-item" style="color:grey">{{ user.username }}</a>
+          <a class="dropdown-item" href="{% url 'team:user_detail' user.pk %}">Profile</a>
+          <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
+        </div>
+      </div>
+    <!-- end of initial in circle w/ dropdown -->
+    {% else %}
+    <div class="user-area">
+      <a href="{% url 'login' %}" class="nav-link login" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        Login
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</header>
+<!-- End of Navbar -->
+
+<!-- Main content -->
+<div id="page-content-wrapper">
+  <div class="content">
+    {% block body %}
+    {% endblock %}
+  </div>
+</div>
+<!-- end of Main content -->
+<!-- Scripts -->
+
+{% include "scripts_links.html" %}
+{% block scripts %}{% endblock %}
+
+</body>
+
+</html>

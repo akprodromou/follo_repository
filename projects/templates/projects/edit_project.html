@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
+<div class="container">
+  <div class="row align-items-center justify-content-around mt-4">
+    <div class="col-auto">
+      <h2>Edit Project</h2>
+      <p style="line-height:1.6em;"></p>
+      <form method="POST" action="{% url 'projects:edit_project' project.pk %}" id="projectForm">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary btn-large">Save</button>
+        {% endbuttons %}
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

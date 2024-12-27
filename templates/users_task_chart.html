@@ -1,0 +1,97 @@
+<script>
+  Chart.defaults.global.defaultFontFamily = "'Manrope', sans-serif";
+  var defaultData = [];
+  var labels = [];
+  var endpoint = '/user_tasks_chart/'
+  $.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(data){
+      labels = data.labels
+      if(data.data.every(item => item === 0)) {
+        defaultData = [0,0,1];
+      } else {
+        defaultData = data.data;
+      }
+      if(data.data.every(item => item === 0)) {
+        colors = ["rgba(193, 54, 37, 0.2)", "rgba(255, 187, 68, 0.2)", "rgba(109, 160, 111, 0.2)"];
+      } else {
+        colors = ["#c13525", "#ffbb43", "#6da06f"];
+      }
+      percentage = data.data.reduce(function(a, b){
+        return a + b;
+    }, 0);
+      setChart_Tasks()
+    },
+    error: function(error_data){
+      console.log("error")
+      console.log(error_data)
+    },
+  })
+
+// ctx1 chart
+  function setChart_Tasks(){
+    var ctx1 = document.getElementById('task-chart');
+    var goals_chart = new Chart(ctx1, {
+      type: 'doughnut',
+      data: {
+        datasets: [
+        {
+          data: defaultData,
+          backgroundColor: colors,
+          borderWidth: 0,
+          borderColor: "rgba(0,0,0,0)",
+        },
+        ],
+        labels: ['Late','Approaching','Far-off']
+      },
+      options: {
+        elements: {
+            center: {
+                text: '50%'  //set as you wish
+            }
+        },
+        legend:{
+          onClick: false,
+          display: true,
+          labels: {
+            fontColor: 'white',
+            boxWidth: 10,
+            usePointStyle: true,
+          }
+        },
+        title: {
+          display: false,
+        },
+        cutoutPercentage: 92,
+        plugins: {
+          datalabels: false
+        },
+      },
+    });
+  }
+
+
+  Chart.pluginService.register({
+    id: 'p1',
+    beforeDraw: function(chart) {
+      var width = chart.chart.width,
+          height = chart.chart.height,
+          ctx = chart.chart.ctx;
+
+      ctx.restore();
+      var fontSize = (height / 114).toFixed(2);
+      ctx.font = "24px Manrope";
+      ctx.height = 100;
+      ctx.fillStyle = "white";
+      ctx.textBaseline = "middle";
+      var text = percentage,
+          textX = Math.round((width - ctx.measureText(text).width) / 2),
+          textY = height/100*66;
+
+      ctx.fillText(text, textX, textY);
+      ctx.save();
+    }
+  });
+
+</script>

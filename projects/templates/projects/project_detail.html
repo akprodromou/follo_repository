@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<!-- Add Worktime Modal -->
+{% include "projects/add_worktime_modal.html" %}
+<!-- end of Add Task Modal -->
+
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'projects:project_categories_list' %}">Project Categories</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'projects:project_category' project.project_category.projectcategory_number %}">{{ project.project_category }}</a></li>
+    </ol>
+  </nav>
+  <div class="row justify-content-center">
+    <div class="col-12 m-2 pl-4 pr-4">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-auto m-0 p-0 pb-2">
+          <div class="card project-detail">
+            <div class="chart-container">
+            <h3 class="white">{{ project }}<a href="{% url 'projects:edit_project' project.pk %}"> <i class="white far fa-edit" style="font-size:10px"></i></a></h3>
+            <p style="line-height:1.6em;"></p>
+            <table class="table-sm">
+              <tr class="white">
+                <td class="table-label">Stage: </td>
+                <td class="align-middle">{{ project.project_stage }}</td>
+              </tr>
+              <tr class="white">
+                <td class="table-label">Delivery date:</td>
+                <td class="align-middle">{{ project.project_delivery_date }}</td>
+              </tr>
+              <tr class="white">
+                <td class="table-label">Project members:</td>
+                <td class="align-middle">
+                  {% for member in project.project_members.all %}
+                <a class="white comma" href="{% url 'team:user_detail' member.pk %}">{{ member }}<span></span></a>
+                {% endfor %}</td>
+                <tr>
+                  <td></td>
+                </tr>
+                <tr>
+                <td>
+                {% if user in project.project_members.all %}
+                <a style="color:#FFF;" href="{% url 'projects:leave_project' project.pk %}"
+                class="btn btn-warning btn-sm">Leave</a>
+                {% else %}
+                <a style="color:#FFF;" href="{% url 'projects:join_project' project.pk %}"
+                class="btn btn-info btn-sm">Join</a>
+                {% endif %}
+                </td>
+              </tr>
+              {% if messages %}
+              <tr class="messages">
+                {% for message in messages %}
+                <td class="white" {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }}</td>
+                {% endfor %}
+              </tr>
+              {% endif %}
+            </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-auto mb-2">
+          <div class="card user-hours">
+            <div class="chart-container">
+              <h6 class="title white">Project activity
+                <span><button class="add_worktime_popup white"
+                  data-toggle="modal" data-target="#addWorktimeModal"> +</button></span>
+              </h6>
+              {% if workhours_all %}
+              <canvas id="project_hours_graph"></canvas>
+              {% else %}
+              <p class="message white">No hours logged.</p>
+              {% endif %}
+              </div>
+          </div>
+        </div>
+
+
+      </div>
+        <br>
+        <h5>Tasks
+          <a href="{% url 'projects:add_task_project' project.pk %}" class="btn btn-light btn-sm" role="button"> +</a>
+        </h5>
+
+        {% if pending_tasks %}
+      <table style="width:100%" class="table table-hover table-sm">
+        <thead>
+          <tr>
+            <th class="align-middle" scope="col">Description</th>
+            <th class="align-middle" scope="col">Person</th>
+            <th class="align-middle" scope="col">Deadline</th>
+            <th class="align-middle text-center" scope="col">Mark as complete</th>
+            <th class="align-middle" scope="col">Edit</th>
+            <th class="align-middle" scope="col">Delete</th>
+          </tr>
+        </thead>
+
+        {% for t in project_tasks %}
+        {% if t.task_status == 'Pending' %}
+        {% if t.is_past_due %}
+        <tr class='clickable-row' data-href="{% url 'team:task_detail' t.pk %}" style="background-color:#f8ddda">
+          {% elif t.is_close_due %}
+          <tr class='clickable-row' data-href="{% url 'team:task_detail' t.pk %}" style="background-color:#ffedcc">
+            {% else %}
+            <tr class='clickable-row' data-href="{% url 'team:task_detail' t.pk %}" style="background-color:#e4ede4">
+              {% endif %}
+              <td class="align-middle">{{ t.task_description }}</td>
+              <td class="align-middle">{{ t.task_owner }}</td>
+              <td class="align-middle"> {{ t.task_due_date }}</td>
+              <td class="align-middle text-center task-update">
+              <form action="{% url 'update_task_status' t.id %}"  method="post">
+                {% csrf_token %}
+                <button type="submit" name="button">
+                  <a href="#">
+                    <i type="submit" class="fas fa-check"></i>
+                  </a>
+                </button>
+              </form>
+              </td>
+              <td class="align-middle">
+                <a href="{% url 'team:edit_task_user' t.pk %}" class="btn btn-sm" role="button"><i class="far fa-edit"></i></a>
+              </td>
+              <td class="align-middle">
+                <a href="{% url 'team:delete_task_user' t.pk %}" class="btn btn-simple">
+                  <i class="far fa-trash-alt"></i>
+                </a>
+              </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+          </table>
+
+          {% else %}
+          <p>No tasks have been assigned.</p>
+          {% endif %}
+
+          <p style="color:grey; font-size:12px">See {{ project.project_number }} - {{ project.project_name }} <a href="{% url 'projects:project_task_history' project.pk %}">task history</a>.</p>
+        </div>
+      </div>
+    </div>
+{% endblock body %}
+
+{% block scripts %}
+
+<script type="text/javascript">
+$(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.document.location = $(this).data("href");
+    });
+});
+</script>
+
+{% include "projects/project_hours_graph.html" %}
+
+{% endblock  %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+{% bootstrap_javascript jquery='full' %}
+{{ formset.media }}
+
+<div class="container">
+  <div class="row align-items-center justify-content-around mt-4">
+    <div class="col-12 col-md-8 col-lg-6 form-group">
+      <h2>Add Worktime</h2>
+      <p style="line-height:1.6em;"></p>
+      <form method="POST" action="{% url 'team:add_worktime_user' user.pk %}" id="worktimeForm">
+
+        {{ formset.management_form }}
+        {% csrf_token %}
+        {% for form in formset %}
+        <h4>Worktime</h4>
+        <div class="worktime-form">
+          {% bootstrap_form form %}
+        </div>
+        {% endfor %}
+        <button id="add-form" type="button" class="btn btn-outline-primary mb-4">Add another</button>
+        <br>
+        <p>
+          <button type="submit" class="btn btn-primary btn-large">Save</button>
+          <a href="javascript:window.history.back()"><button type="button" class="btn btn-default btn-large">Cancel</button></a>
+        </p>
+        <p style="line-height:1.6em;"></p>
+        <p style="margin-left:0px; font-size:0.9em">Do you want to add a new <strong><a href="{% url 'team:add_task_user' user.pk %}"> Task</a></strong>?</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+let worktimeForm = document.querySelectorAll(".worktime-form")
+let container = document.querySelector("#worktimeForm")
+let addButton = document.querySelector("#add-form")
+let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+
+let formNum = worktimeForm.length-1
+addButton.addEventListener('click', addForm)
+
+function addForm(e){
+    e.preventDefault()
+
+    let newForm = worktimeForm[0].cloneNode(true)
+    let formRegex = RegExp(`form-(\\d){1}-`,'g')
+
+    formNum++
+    newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+    container.insertBefore(newForm, addButton)
+
+    totalForms.setAttribute('value', `${formNum+1}`)
+}
+
+
+
+</script>
+{% endblock scripts %}

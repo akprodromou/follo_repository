@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+{% load bootstrap4 %}
+{% bootstrap_javascript jquery='full' %}
+
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+      <li class="breadcrumb-item">Project Categories</li>
+    </ol>
+  </nav>
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 m-0 p-0">
+      <!-- Projects area -->
+      <p style="line-height:1.6em;"></p>
+      <h4 class="table-header">Project Categories<a href="{% url 'projects:add_project_category' %}" class="btn btn-light btn-sm" role="button"> +</a></h4>
+      {% if projectcategory_list %}
+      <table style="width:100%" class="table table-hover table-sm justify-content-md-center">
+        <thead class="thead-dark">
+          <tr>
+            <th class="align-middle" scope="col">Number</th>
+            <th class="align-middle" scope="col">Name</th>
+            <th class="align-middle text-center" scope="col">No. of Projects</th>
+            <th class="align-middle text-center" scope="col">Open tasks</th>
+          </tr>
+        </thead>
+        {% for p in projectcategory_list %}
+        <tr class='clickable-row' data-href="{% url 'projects:project_category' p.projectcategory_number %}">
+          <td class="align-middle">{{ p.projectcategory_number }}</td>
+          <td class="align-middle">{{ p.projectcategory_name }}</td>
+          <td class="align-middle text-center">{{ p.category_projects.count }}</td>
+          {% if p.num_tasks %}
+          <td class="align-middle text-center">{{ p.num_tasks }}</td>
+          {% else %}
+          <td class="align-middle text-center">0</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </table>
+      {% else %}
+      <p>No project categories are available.</p>
+      <a href="{% url 'projects:add_project_category' %}" class="btn btn-light btn-sm" role="button">Add a project category +</a>
+      {% endif %}
+    </div>
+  </div>
+<br>
+  <div class="row justify-content-center">
+    <div class="col-auto">
+      <div class="card busiest_projects">
+        <div class="chart-container">
+          <h6 class="title white">Busiest Projects</h6>
+          {% if project_hours_2weeks %}
+          <canvas id="busiest_projects"></canvas>
+          {% else %}
+          <p class="message white">No hours have been logged <span><br>in the past two weeks.</span></p>
+          {% if user %}
+          <br>
+          <p><a href="{% url 'team:add_worktime_user' user.pk %}" class="btn btn-info btn-sm">Log hours</a></p>
+          {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-auto">
+      <div class="card busiest_project_categories">
+        <div class="chart-container">
+          <h6 class="title white">Activity per Project Category<span><br><h6>past 2 weeks</h6></span></h6>
+          {% if project_hours_2weeks %}
+          <canvas id="busiest_project_categories"></canvas>
+          {% else %}
+          <p class="message white">No hours have been logged <span><br>in the past two weeks.</span></p>
+          {% if user %}
+          <br>
+          <p><a href="{% url 'team:add_worktime_user' user.pk %}" class="btn btn-info btn-sm">Log hours</a></p>
+          {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock body %}
+<!-- end of body block -->
+
+{% block scripts %}
+  <script type="text/javascript">
+    $(document).ready(function($) {
+      $(".clickable-row").click(function() {
+        window.document.location = $(this).data("href");
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+{% include "projects/busiest_projects.html" %}
+{% include "projects/busiest_project_categories.html" %}
+
+{% endblock scripts %}

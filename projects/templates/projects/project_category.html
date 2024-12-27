@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% load bootstrap4 %}
+{% bootstrap_javascript jquery='full' %}
+
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'projects:project_categories_list' %}">Project Categories</a></li>
+      <li class="breadcrumb-item">{{ project_category }}</li>
+    </ol>
+  </nav>
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 m-0 p-0">
+      <p style="line-height:1.6em;"></p>
+      <h4 class="table-header">Projects<a href="{% url 'projects:add_project' project_category.projectcategory_number %}" class="btn btn-light btn-sm" role="button"> +</a></h4>
+      {% if project_list %}
+      <table style="width:100%" class="table table-hover table-sm">
+        <thead class="thead-dark">
+          <tr>
+            <th class="align-middle" scope="col">Number</th>
+            <th class="align-middle" scope="col">Name</th>
+            <th class="align-middle" scope="col">Delivery date</th>
+            <th class="align-middle text-center" scope="col">Open tasks</th>
+          </tr>
+        </thead>
+        {% for p in project_list %}
+        <tr class='clickable-row' data-href="{% url 'projects:project_detail' p.pk %}">
+          <td class="align-middle">{{ p.project_number }}</td>
+          <td class="align-middle">{{ p.project_name }}</td>
+          <td class="align-middle">{{ p.project_delivery_date }}</td>
+          <td class="align-middle text-center">{{ p.project_tasks.count }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% else %}
+      <p>No projects are available. Would you like to
+        <strong><a href="{% url 'projects:add_project' project_category.projectcategory_number %}">add </a></strong>one?
+      </p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript">
+    $(document).ready(function($) {
+      $(".clickable-row").click(function() {
+        window.document.location = $(this).data("href");
+      });
+    });
+  </script>
+
+{% endblock scripts %}

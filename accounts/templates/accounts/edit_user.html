@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+<div class="container">
+  <div class="row justify-content-around align-items-start">
+    <div class="col-10 col-md-8 col-lg-6">
+      <h2>Edit user</h2>
+      <p style="line-height:1.6em;"></p>
+      <form method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit" class="btn btn-secondary" value="Save">
+      </form>
+      <p style="line-height:1.6em;"></p>
+          <p style="line-height:.6em; margin-left:0px; font-size:0.8em"><a style="color:#808080" href="{% url 'password_change' %}">Change password?</a></p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

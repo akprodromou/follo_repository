@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
+<h2>Add a Comment</h2>
+
+<br>
+<div class="container">
+  <div class="row">
+    <form method="POST" action="{% url 'team:add_comment' task.pk %}" id="commentForm">
+    	{% csrf_token %}
+    	{% bootstrap_form form %}
+    	{% buttons %}
+    		<button type="submit" class="btn btn-primary btn-large">Add</button>
+    	{% endbuttons %}
+    </form>
+  </div>
+</div>
+
+{% endblock %}

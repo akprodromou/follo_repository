@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+
+
+<div class="container">
+  <div class="row align-items-center justify-content-around mt-4">
+    <div class="col-auto">
+      <h2>Delete Job Category</h2>
+      <p style="line-height:1.6em;"></p>
+      <form method="POST" action="{% url 'subcontractors:delete_jobcategory' %}" id="jobcategoryForm">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary btn-large">Delete</button>
+        {% endbuttons %}
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

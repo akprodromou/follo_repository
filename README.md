@@ -1,5 +1,13 @@
 # Follo
 
-Follo is a Project Management application written using Python programming and the Django Framework. Its aim is to provide an easy-to-use, visually compelling tool for organizing, monitoring and summarizing work.
+Follo is a web-based Project Management application built with Python and the Django framework. It is designed to help teams and individuals effectively organize, track, and report on their work.
+
+The app includes features for managing:
+
+- Projects and related tasks
+- Subcontractors and teams
+- Reports and documentation
+
+The aim of the project was to deliver a clean, intuitive interface for planning and monitoring progress, making it a helpful tool for collaboration and productivity.
 
 

@@ -1,6 +1,6 @@
 from django import forms
 from django.core import validators
-from bootstrap_datepicker_plus.widgets import DatePickerInput
+from bootstrap_datepicker_plus import DatePickerInput
 from .models import *
 from django.contrib.auth.models import User
 

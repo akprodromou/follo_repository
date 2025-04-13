@@ -187,7 +187,7 @@ header .searchBar input:hover {
 
 header .searchBar .fas{
   color: #aab2b8;
-  padding: 10px 10px 0px 10px;
+  padding: 1em 1em 1em 1em;
 }
 
 textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {
@@ -356,73 +356,131 @@ header .dropdown {
 
 /* On screens that are less than 768px wide, make the sidebar into a topbar */
 @media screen and (max-width: 768px) {
-  #page-content-wrapper{
-    margin-left: 0px;
-    padding-top: 0px;
+  #page-content-wrapper {
+    margin-left: 0;
+    padding-top: 0;
   }
 
-  header{
-    margin-left: 0px;
+  header {
+    margin-left: 0;
     width: 100%;
-    position: relative; /* Set the navbar to fixed position */
-    top: 0px;
+    position: relative;
+    top: 0;
   }
 
   .sideBar {
     width: 100%;
     height: auto;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .sideBar img {
+    padding-top: 10px;
+    width: 80px;
+  }
+
+  .sideBar nav {
+    padding-top: 30px;
+    width: 100%;
   }
 
   .sideBar a {
-    text-align: left;
-    padding-left: 41%;
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    text-align: center;
     float: none;
   }
 
-  #logo a{
-    padding-left: 8.4%;
-  }
-
   .sideBar a.active {
-    padding-left: 40%;
+    border-left: none;
+    border-bottom: 2px solid var(--accent);
+    padding: 10px 0;
   }
 
-  .sideBar img{
-    padding-top: 0px;
+  .sideBar a .fas {
+    margin-right: 0.5rem;
+    top: 2px;
   }
 
-  .sideBar nav{
-    padding-top: 40px;
-  }
-
-  .sideBar nav a{
-    padding-right: 45px;
-  }
-
-  .nav-link{
+  .nav-link {
     display: flex;
     justify-content: center;
   }
 
-  .nav-link a{
-    padding: 0px;
+  .nav-link a {
+    padding: 0;
   }
 
-  .sideBar a .fas {
-    margin-right: .2rem;
+  #logo a {
+    padding: 0;
   }
 
+  .searchBar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  .searchBar form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 300px; /* optional limit */
+  }
+  
+  .searchBar input {
+    flex: 1;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    font-size: 14px;
+  }
+  
+  .searchBar button {
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    background: transparent;
+    border: none;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  header .dropdown {
+    display: none !important;
+  }
 }
+
 
 /* On screens that are less than 480px, display the bar vertically, instead of horizontally */
 @media screen and (max-width: 480px) {
   .sideBar a {
     text-align: center;
-    float: none;
+    padding: 10px 0;
   }
 
-  .sideBar nav{
-    padding-top: 60px;
+  .sideBar nav {
+    padding-top: 40px;
+  }
+
+  .searchBar {
+    padding: 5px;
+  }
+
+  .searchBar form {
+    max-width: 90%;
+  }
+
+  .searchBar input {
+    font-size: 13px;
   }
 }
+

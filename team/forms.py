@@ -2,7 +2,7 @@ from django import forms
 from django.core import validators
 from accounts.models import User
 from team.models import Comment, Task, Worktime
-from bootstrap_datepicker_plus.widgets import DatePickerInput
+from bootstrap_datepicker_plus import DatePickerInput
 from django.contrib.auth import get_user_model
 User = get_user_model()
 

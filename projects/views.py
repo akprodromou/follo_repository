@@ -6,7 +6,7 @@ from django.views import generic
 from django.db.models import Case, CharField, Value, When
 from django.db import IntegrityError
 from django.utils.decorators import method_decorator
-from bootstrap_datepicker_plus.widgets import DatePickerInput
+from bootstrap_datepicker_plus import DatePickerInput
 from projects.forms import ProjectForm
 from team.forms import AddWorktimeForm
 from django.forms import MultipleChoiceField
@@ -25,11 +25,13 @@ User = get_user_model()
 # Create your views here.
 
 class add_project_category(LoginRequiredMixin,generic.CreateView):
+# class add_project_category(generic.CreateView):
     fields = ('projectcategory_number','projectcategory_name')
     model = ProjectCategory
     template_name = 'projects/add_project_category.html'
 
 class add_project(LoginRequiredMixin,generic.CreateView):
+# class add_project(generic.CreateView):
     model = Project
     form_class = ProjectForm
     def get_initial (self):
@@ -53,6 +55,7 @@ class add_project(LoginRequiredMixin,generic.CreateView):
         # return reverse('projects:project_detail', kwargs={'<int:pk>': self.object.pk})
 
 class edit_project(LoginRequiredMixin,generic.UpdateView):
+# class edit_project(generic.UpdateView):
     model = Project
     form_class = ProjectForm
     def get_form(self):
@@ -71,6 +74,7 @@ queryset = Project.objects.annotate(num_worktime=Sum('project_tasks__task_time__
 
 
 class project_categories_list(LoginRequiredMixin,generic.ListView):
+# class project_categories_list(generic.ListView):
     model = ProjectCategory
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -94,6 +98,7 @@ class project_category(generic.ListView):
     template_name = 'projects/project_category.html'
 
 class project_detail(LoginRequiredMixin,generic.DetailView):
+# class project_detail(generic.DetailView):
     model = Project
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -131,6 +136,7 @@ class project_detail(LoginRequiredMixin,generic.DetailView):
     template_name = 'projects/project_detail.html'
 
 class join_project(LoginRequiredMixin,generic.RedirectView):
+# class join_project(generic.RedirectView):
     def get(self,request,*args,**kwargs):
         active_user = self.request.user
         project = get_object_or_404(Project,pk=self.kwargs.get('pk'))
@@ -145,6 +151,7 @@ class join_project(LoginRequiredMixin,generic.RedirectView):
         return reverse('projects:project_detail',kwargs={'pk':self.kwargs.get('pk')})
 
 class leave_project(LoginRequiredMixin,generic.RedirectView):
+# class leave_project(generic.RedirectView):
     def get(self,request,*args,**kwargs):
         active_user = self.request.user
         project = get_object_or_404(Project,pk=self.kwargs.get('pk'))
@@ -160,6 +167,7 @@ class leave_project(LoginRequiredMixin,generic.RedirectView):
         return reverse('projects:project_detail',kwargs={'pk':self.kwargs.get('pk')})
 
 class add_job_project(LoginRequiredMixin,generic.edit.CreateView):
+# class add_job_project(generic.edit.CreateView):
     model = Job
     fields = ('job_description','job_subcontractor',
     'job_project','job_category','job_status',
@@ -183,6 +191,7 @@ class add_job_project(LoginRequiredMixin,generic.edit.CreateView):
 # Project Task CRUD
 
 class add_task_project(LoginRequiredMixin,generic.CreateView):
+# class add_task_project(generic.CreateView):
     model = Task
     fields = ('task_project','task_description',
         'task_owner','task_asignee','task_due_date')

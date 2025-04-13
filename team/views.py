@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixi
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.utils import timezone
-from bootstrap_datepicker_plus.widgets import DatePickerInput
+from bootstrap_datepicker_plus import DatePickerInput
 from django.views import generic, View
 from django.http import HttpResponseForbidden
 from django.views.generic.edit import FormMixin, FormView
@@ -32,6 +32,7 @@ class users_list(generic.ListView):
     template_name = 'team/user_list.html'
 
 class user_detail(LoginRequiredMixin,generic.DetailView):
+# class user_detail(generic.DetailView):
     template_name = 'team/user_detail.html'
     model = User
     context_object_name = 'user_examined'
@@ -92,6 +93,7 @@ class user_detail(LoginRequiredMixin,generic.DetailView):
 # Task CRUD (user-specific)
 
 class add_task_user(LoginRequiredMixin,generic.CreateView):
+# class add_task_user(generic.CreateView):
     model = Task
     fields = ('task_project','task_description',
         'task_owner','task_asignee','task_due_date')
@@ -114,6 +116,7 @@ class add_task_user(LoginRequiredMixin,generic.CreateView):
         return reverse('team:user_detail', kwargs={'pk':self.kwargs['pk']})
 
 class edit_task_user(LoginRequiredMixin,generic.UpdateView):
+# class edit_task_user(generic.UpdateView):
     model = Task
     fields = ('task_project','task_description',
         'task_asignee','task_status','task_due_date')
@@ -130,6 +133,7 @@ class edit_task_user(LoginRequiredMixin,generic.UpdateView):
         return reverse('team:user_detail', kwargs={'pk':self.object.task_asignee.pk})
 
 class delete_task_user(LoginRequiredMixin,generic.DeleteView):
+# class delete_task_user(generic.DeleteView):
     model = Task
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -188,6 +192,7 @@ class task_detail(View):
         return view(request, *args, **kwargs)
 
 class edit_comment(LoginRequiredMixin,generic.UpdateView):
+# class edit_comment(generic.UpdateView):
     model = Comment
     fields = ('comment_text',)
     template_name = 'team/edit_comment.html'
@@ -195,6 +200,7 @@ class edit_comment(LoginRequiredMixin,generic.UpdateView):
         return reverse('team:task_detail', kwargs={'pk':self.kwargs['pk']})
 
 class delete_comment(LoginRequiredMixin,generic.DeleteView):
+# class delete_comment(generic.DeleteView):
     model = Comment
     template_name = 'team/delete_comment.html'
     def get_success_url(self):

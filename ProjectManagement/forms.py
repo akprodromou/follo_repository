@@ -1,6 +1,6 @@
 from django import forms
 from django.forms.widgets import HiddenInput
-from bootstrap_datepicker_plus.widgets import DatePickerInput
+from bootstrap_datepicker_plus import DatePickerInput
 from team.models import Task
 from django.contrib.auth import get_user_model
 User = get_user_model()

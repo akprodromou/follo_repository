@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
-from bootstrap_datepicker_plus.widgets import DatePickerInput
+from bootstrap_datepicker_plus import DatePickerInput
 from django.urls import reverse
 from django.utils.encoding import force_str
 import operator
@@ -23,6 +23,7 @@ import datetime
 User = get_user_model()
 
 class index(LoginRequiredMixin,TemplateView):
+# class index(TemplateView):
     model = User
     template_name = 'index.html'
     def get_context_data(self, **kwargs):

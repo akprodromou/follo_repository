@@ -27,32 +27,28 @@ To run this project locally:
    cd follo_repository
    ```
 2. Create and activate a virtual environment
-
-```bash
-Copy
-Edit
-python3 -m venv venv
-source venv/bin/activate
-```
+   ```bash
+   Copy
+   Edit
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
 3. Install dependencies
-
-```bash
-Copy
-Edit
-pip install -r requirements.txt
-```
+   ```bash
+   Copy
+   Edit
+   pip install -r requirements.txt
+   ```
 4. Run migrations
-
-```bash
-Copy
-Edit
-python manage.py migrate
-```
+   ```bash
+   Copy
+   Edit
+   python manage.py migrate
+   ```
 5. Start the development server
-
-```bash
-Copy
-Edit
-python manage.py runserver
-```
+   ```bash
+   Copy
+   Edit
+   python manage.py runserver
+   ```
 This project is currently deployed at: benanton.pythonanywhere.com

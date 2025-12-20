@@ -2,7 +2,7 @@
 
 Follo is a web-based Project Management application built with Python and the Django framework. It is designed to help teams and individuals effectively organize, track, and report on their work.
 
-The app includes features for managing:
+Through the app, users can create, schedule and manage the following:
 
 - Projects and related tasks
 - Subcontractors and teams
@@ -10,11 +10,11 @@ The app includes features for managing:
 
 The aim of the project was to deliver a clean, intuitive interface for planning and monitoring progress, making it a helpful tool for collaboration and productivity.
 
-## Tech Stack
+## Tools and Frameworks used
 
-- **Backend:** Python 3.10, Django 3.2
+- **Backend:** Python 3.10, Django 3.2.7
 - **Frontend:** HTML, CSS (Bootstrap 4)
-- **Database:** SQLite (development)
+- **Database:** SQLite
 - **Other:** Bootstrap Datepicker Plus, Modal Forms
 
 ## Getting Started

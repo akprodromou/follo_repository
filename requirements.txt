@@ -7,7 +7,7 @@ django-bootstrap-modal-forms==3.0.5
 django-bootstrap4==25.1
 django-braces==1.17.0
 misaka==2.1.1
-pillow==11.2.1
+pillow>=12.2.0
 pycparser==2.22
 pytz==2025.2
 soupsieve==2.6
